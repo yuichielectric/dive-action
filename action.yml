@@ -1,0 +1,11 @@
+name: 'Dive Action'
+description: 'Run Dive to analyze the container image efficiency'
+inputs:
+  image:
+    description: 'Image to analyze'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - run: docker run -e CI=true -e DOCKER_API_VERSION=1.37 --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive:v0.9 ${{ inputs.image }}
+      shell: bash
