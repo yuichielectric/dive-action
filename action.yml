@@ -11,5 +11,5 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - run: docker run -e CI=true -e DOCKER_API_VERSION=1.37 --rm --mount type=bind,source=${{ inputs.config }},target=/.dive-ci -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive:v0.9 --ci-config /.dive-ci ${{ inputs.image }}
+    - run: docker run -e CI=true -e DOCKER_API_VERSION=1.37 --rm --mount type=bind,source=${{ inputs.config-file }},target=/.dive-ci -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive:v0.9 --ci-config /.dive-ci ${{ inputs.image }}
       shell: bash
