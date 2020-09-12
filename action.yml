@@ -1,15 +1,19 @@
-name: 'Dive Action'
-description: 'Run Dive to analyze the container image efficiency'
+name: "Dive Action"
+description: "Run Dive to analyze the container image efficiency"
+author: "@yuichielectric"
+branding:
+  icon: "aperture"
+  color: "green"
 inputs:
   image:
-    description: 'Image to analyze'
+    description: "Image to analyze"
     required: true
   config-file:
-    description: 'Path to dive config file'
+    description: "Path to dive config file"
     required: false
     default: ${{ github.workspace }}/.dive.yaml
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - run: docker run -e CI=true -e DOCKER_API_VERSION=1.37 --rm --mount type=bind,source=${{ inputs.config-file }},target=/.dive-ci -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive:v0.9 --ci-config /.dive-ci ${{ inputs.image }}
       shell: bash
