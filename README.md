@@ -128,8 +128,8 @@ Result:FAIL [Total:3] [Passed:2] [Failed:1] [Warn:0] [Skipped:0]
 ```
 
 [release]: https://github.com/yuichielectric/dive-action/releases/latest
-[release-badge]: https://img.shields.io/github/release/yuichielectric/dive-action.svg?logo=github
+[release-badge]: https://img.shields.io/github/release/yuichielectric/dive-action.svg?logo=github&color=green
 [marketplace]: https://github.com/marketplace/actions/dive-action
-[marketplace-badge]: https://img.shields.io/badge/marketplace-dive--action-blue?logo=github
+[marketplace-badge]: https://img.shields.io/badge/marketplace-dive--action?logo=github&color=green
 [license]: https://github.com/yuichielectric/dive-action/blob/master/LICENSE
 [license-badge]: https://img.shields.io/github/license/yuichielectric/dive-action.svg
