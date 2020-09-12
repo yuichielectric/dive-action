@@ -1,5 +1,6 @@
 # dive action
 
+[![Release][release-badge]][release]
 [![License][license-badge]][license]
 
 
@@ -125,5 +126,7 @@ Result:FAIL [Total:3] [Passed:2] [Failed:1] [Warn:0] [Skipped:0]
 ##[error]Process completed with exit code 1.
 ```
 
+[release]: https://github.com/yuichielectric/dive-action/releases/latest
+[release-badge]: https://img.shields.io/github/release/yuichielectric/dive-action.svg?logo=github
 [license]: https://github.com/yuichielectric/dive-action/blob/master/LICENSE
 [license-badge]: https://img.shields.io/github/license/yuichielectric/dive-action.svg
