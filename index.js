@@ -7,6 +7,7 @@ async function run() {
     const image = core.getInput("image");
     const configFile = core.getInput("config-file");
 
+    core.info("starting...");
     const commandOptions = [
       "run",
       "-e",
