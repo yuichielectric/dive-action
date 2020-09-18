@@ -34,15 +34,16 @@ async function run() {
       },
     };
     const ret = await exec.exec("docker", commandOptions, execOptions);
-    if (ret.exitCode !== 0) {
-      const token = core.getInput("github-token");
-      const octokit = github.getOctokit(token);
-      await octokit.issues.createComment({
-        ...github.context.issue,
-        body: output,
-      });
-      core.setFailed("Scan failed");
+    if (ret.exitCode === 0) {
+      return;
     }
+    const token = core.getInput("github-token");
+    const octokit = github.getOctokit(token);
+    await octokit.issues.createComment({
+      ...github.context.issue,
+      body: output,
+    });
+    core.setFailed("Scan failed");
   } catch (error) {
     core.setFailed(error.message);
   }
