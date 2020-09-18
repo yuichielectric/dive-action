@@ -35,11 +35,13 @@ async function run() {
       },
     };
     const ret = await exec.exec("docker", commandOptions, execOptions);
+    core.info("finish analyzing...");
     if (ret.exitCode === 0) {
       return;
     }
     const token = core.getInput("github-token");
     const octokit = github.getOctokit(token);
+    core.info(`debug info: ${output}`);
     await octokit.issues.createComment({
       ...github.context.issue,
       body: output,
