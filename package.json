@@ -1,0 +1,25 @@
+{
+  "name": "dive-action",
+  "version": "1.0.0",
+  "description": "[![Release][release-badge]][release] [![GitHub Marketplace][marketplace-badge]][marketplace] [![License][license-badge]][license]",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuichielectric/dive-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuichielectric/dive-action/issues"
+  },
+  "homepage": "https://github.com/yuichielectric/dive-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.5",
+    "@actions/exec": "^1.0.4",
+    "@actions/github": "^4.0.0"
+  }
+}
