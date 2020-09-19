@@ -36,6 +36,7 @@ async function run() {
       },
     };
     const ret = await exec.exec("docker", commandOptions, execOptions);
+    console.log(ret);
     if (ret.exitCode === 0) {
       return;
     }
