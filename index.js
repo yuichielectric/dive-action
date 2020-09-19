@@ -42,7 +42,7 @@ async function run() {
     }
     const token = core.getInput("github-token");
     const octokit = github.getOctokit(token);
-    console.log(token, octokit, github.context, github.context.issue, coutput);
+    console.log(token, octokit, github.context, github.context.issue, output);
     await octokit.issues.createComment({
       ...github.context.issue,
       body: output,
