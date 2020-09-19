@@ -45,6 +45,7 @@ async function run() {
     console.log(token, octokit, github.context, github.context.issue, output);
     await octokit.issues.createComment({
       ...github.context.issue,
+      issue_number: github.context.issue.number,
       body: output,
     });
     core.setFailed("Scan failed");
