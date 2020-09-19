@@ -35,9 +35,9 @@ async function run() {
         output += data.toString();
       },
     };
-    const ret = await exec.exec("docker", commandOptions, execOptions);
-    console.log(ret);
-    if (ret.exitCode === 0) {
+    const exitCode = await exec.exec("docker", commandOptions, execOptions);
+    if (exitCode === 0) {
+      // success
       return;
     }
     const token = core.getInput("github-token");
@@ -48,7 +48,6 @@ async function run() {
     });
     core.setFailed("Scan failed");
   } catch (error) {
-    core.info("Caught error...");
     core.setFailed(error.message);
   }
 }
