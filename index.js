@@ -42,15 +42,16 @@ async function run() {
     }
     const token = core.getInput("github-token");
     const octokit = github.getOctokit(token);
-    console.log(token, octokit, github.context, github.context.issue, output);
-    await octokit.issues.createComment({
+    const comment = {
       ...github.context.issue,
       issue_number: github.context.issue.number,
       body: output,
-    });
+    };
+    console.log(comment);
+    await octokit.issues.createComment(comment);
     core.setFailed("Scan failed");
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(error);
   }
 }
 
