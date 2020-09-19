@@ -46,6 +46,7 @@ async function run() {
     });
     core.setFailed("Scan failed");
   } catch (error) {
+    core.info("Caught error...");
     core.setFailed(error.message);
   }
 }
