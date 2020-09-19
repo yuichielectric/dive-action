@@ -26,6 +26,7 @@ async function run() {
     ];
     let output = "";
     const execOptions = {};
+    execOptions.ignoreReturnCode = true;
     execOptions.listeners = {
       stdout: (data) => {
         output += data.toString();
