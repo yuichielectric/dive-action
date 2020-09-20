@@ -6,7 +6,7 @@ function format(output) {
   const ret = [];
   let resultSection = false;
   let inefficientFilesSection = false;
-  output.split("\n").foreach((line) => {
+  output.split("\n").forEach((line) => {
     if (line.includes("Analyzing image")) {
       resultSection = true;
       inefficientFilesSection = false;
