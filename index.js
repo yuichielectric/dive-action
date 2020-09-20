@@ -4,7 +4,7 @@ const github = require("@actions/github");
 const stripAnsi = require("strip-ansi");
 
 function format(output) {
-  const ret = [];
+  const ret = ["**The container image has inefficient files.**"];
   let summarySection = false;
   let inefficientFilesSection = false;
   let resultSection = false;
