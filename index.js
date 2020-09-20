@@ -8,7 +8,7 @@ function format(output) {
     .map((line) => {
       return line
         .replace(/\u001B\[1m\s*/g, "**")
-        .replace(/\s*\u001B\[0m/g, "**");
+        .replace(/\s*\u001B\[0m/g, "** ");
     })
     .join("\n");
 }
