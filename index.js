@@ -1,25 +1,32 @@
 const core = require("@actions/core");
 const exec = require("@actions/exec");
 const github = require("@actions/github");
+const stripAnsi = require("strip-ansi");
 
 function format(output) {
   const ret = [];
-  let resultSection = false;
+  let summarySection = false;
   let inefficientFilesSection = false;
+  let resultSection = false;
+
   output.split("\n").forEach((line) => {
     if (line.includes("Analyzing image")) {
-      resultSection = true;
+      summarySection = true;
       inefficientFilesSection = false;
-      ret.push("### Results");
-    } else if (line.includes("Inefficient Files:")) {
       resultSection = false;
+      ret.push("### Summary");
+    } else if (line.includes("Inefficient Files:")) {
+      summarySection = false;
       inefficientFilesSection = true;
+      resultSection = false;
       ret.push("### Inefficient Files");
     } else if (line.includes("Results:")) {
+      summarySection = false;
       resultSection = false;
-      inefficientFilesSection = false;
-    } else if (resultSection) {
-      ret.push(line);
+      inefficientFilesSection = true;
+      ret.push("### Results");
+    } else if (summarySection || resultSection) {
+      ret.push(stripAnsi(line));
     } else if (inefficientFilesSection) {
       ret.push(line);
     }
@@ -68,7 +75,6 @@ async function run() {
       return;
     }
 
-    const stripAnsi = require("strip-ansi");
     const token = core.getInput("github-token");
     const octokit = github.getOctokit(token);
     const comment = {
