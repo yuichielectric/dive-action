@@ -20,6 +20,7 @@
   "dependencies": {
     "@actions/core": "^1.2.5",
     "@actions/exec": "^1.0.4",
-    "@actions/github": "^4.0.0"
+    "@actions/github": "^4.0.0",
+    "strip-ansi": "^6.0.0"
   }
 }

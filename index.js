@@ -39,12 +39,14 @@ async function run() {
       // success
       return;
     }
+
+    const stripAnsi = require("strip-ansi");
     const token = core.getInput("github-token");
     const octokit = github.getOctokit(token);
     const comment = {
       ...github.context.issue,
       issue_number: github.context.issue.number,
-      body: output,
+      body: stripAnsi(output),
     };
     await octokit.issues.createComment(comment);
     core.setFailed(`Scan failed (exit code: ${exitCode})`);
