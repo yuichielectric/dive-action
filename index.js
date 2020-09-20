@@ -2,6 +2,17 @@ const core = require("@actions/core");
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 
+function format(output) {
+  return output
+    .split("\n")
+    .map((line) => {
+      return line
+        .replace(/\s*\u001B\[1m\s*/g, "**")
+        .replace(/\s*\u001B\[0m\s*/g, "**");
+    })
+    .join("\n");
+}
+
 async function run() {
   try {
     const image = core.getInput("image");
@@ -31,10 +42,7 @@ async function run() {
     execOptions.ignoreReturnCode = true;
     execOptions.listeners = {
       stdout: (data) => {
-        output += data
-          .toString()
-          .replace(/[\n\t]*\u001B\[1m[\n\t]*/g, "**")
-          .replace(/[\n\t]*\u001B\[0m[\n\t]*/g, "**");
+        output += data.toString();
       },
       stderr: (data) => {
         output += data.toString();
@@ -52,7 +60,7 @@ async function run() {
     const comment = {
       ...github.context.issue,
       issue_number: github.context.issue.number,
-      body: output,
+      body: format(output),
     };
     await octokit.issues.createComment(comment);
     core.setFailed(`Scan failed (exit code: ${exitCode})`);
