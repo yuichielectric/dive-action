@@ -3,14 +3,28 @@ const exec = require("@actions/exec");
 const github = require("@actions/github");
 
 function format(output) {
-  return output
-    .split("\n")
-    .map((line) => {
-      return line
-        .replace(/\u001B\[1m\s*/g, "**")
-        .replace(/\s*\u001B\[0m/g, "** ");
-    })
-    .join("\n");
+  const ret = [];
+  let resultSection = false;
+  let inefficientFilesSection = false;
+  output.split("\n").foreach((line) => {
+    if (line.includes("Analyzing image")) {
+      resultSection = true;
+      inefficientFilesSection = false;
+      ret.push("### Results");
+    } else if (line.includes("Inefficient Files:")) {
+      resultSection = false;
+      inefficientFilesSection = true;
+      ret.push("### Inefficient Files");
+    } else if (line.includes("Results:")) {
+      resultSection = false;
+      inefficientFilesSection = false;
+    } else if (resultSection) {
+      ret.push(line);
+    } else if (inefficientFilesSection) {
+      ret.push(line);
+    }
+  });
+  return ret.join("\n");
 }
 
 async function run() {
