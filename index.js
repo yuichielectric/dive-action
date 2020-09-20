@@ -7,7 +7,6 @@ async function run() {
     const image = core.getInput("image");
     const configFile = core.getInput("config-file");
 
-    core.info("starting...");
     const commandOptions = [
       "run",
       "-e",
@@ -47,9 +46,8 @@ async function run() {
       issue_number: github.context.issue.number,
       body: output,
     };
-    console.log(comment);
     await octokit.issues.createComment(comment);
-    core.setFailed("Scan failed");
+    core.setFailed(`Scan failed (exit code: ${exitCode})`);
   } catch (error) {
     core.setFailed(error);
   }
