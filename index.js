@@ -22,8 +22,8 @@ function format(output) {
       ret.push("### Inefficient Files");
     } else if (line.includes("Results:")) {
       summarySection = false;
-      resultSection = false;
-      inefficientFilesSection = true;
+      inefficientFilesSection = false;
+      resultSection = true;
       ret.push("### Results");
     } else if (summarySection || resultSection) {
       ret.push(stripAnsi(line));
