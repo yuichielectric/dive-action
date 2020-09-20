@@ -28,7 +28,13 @@ function format(output) {
     } else if (summarySection || resultSection) {
       ret.push(stripAnsi(line));
     } else if (inefficientFilesSection) {
-      ret.push(line);
+      if (line.startsWith("Count")) {
+        ret.push("| Count | Wasted Space | File Paht |");
+        ret.push("|---|---|---|");
+      } else {
+        // https://github.com/wagoodman/dive/blob/master/runtime/ci/evaluator.go#L140
+        ret.push(`| ${line.slice(0, 5)} | ${line.slice(7, 19)} | ${line.slice(21)} |`);
+      }
     }
   });
   return ret.join("\n");
