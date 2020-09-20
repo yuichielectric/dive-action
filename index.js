@@ -7,6 +7,9 @@ async function run() {
     const image = core.getInput("image");
     const configFile = core.getInput("config-file");
 
+    const diveImage = "wagoodman/dive:v0.9";
+    await exec.exec("docker", ["pull", diveImage]);
+
     const commandOptions = [
       "run",
       "-e",
@@ -18,7 +21,7 @@ async function run() {
       `type=bind,source=${configFile},target=/.dive-ci`,
       "-v",
       "/var/run/docker.sock:/var/run/docker.sock",
-      "wagoodman/dive:v0.9",
+      diveImage,
       "--ci-config",
       "/.dive-ci",
       image,
