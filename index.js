@@ -31,7 +31,10 @@ async function run() {
     execOptions.ignoreReturnCode = true;
     execOptions.listeners = {
       stdout: (data) => {
-        output += data.toString();
+        output += data
+          .toString()
+          .replace("\u001B[1m", "**")
+          .replace("\u001B[0m", "**");
       },
       stderr: (data) => {
         output += data.toString();
@@ -49,7 +52,7 @@ async function run() {
     const comment = {
       ...github.context.issue,
       issue_number: github.context.issue.number,
-      body: stripAnsi(output),
+      body: output,
     };
     await octokit.issues.createComment(comment);
     core.setFailed(`Scan failed (exit code: ${exitCode})`);
