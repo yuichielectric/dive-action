@@ -33,8 +33,8 @@ async function run() {
       stdout: (data) => {
         output += data
           .toString()
-          .replace(/\u001B\[1m/g, "**")
-          .replace(/\u001B\[0m/g, "**");
+          .replace(/\s*\u001B\[1m\s*/g, "**")
+          .replace(/\s*\u001B\[0m\s*/g, "**");
       },
       stderr: (data) => {
         output += data.toString();
