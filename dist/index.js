@@ -7,6 +7,25 @@ require('./sourcemap-register.js');module.exports =
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -20,9 +39,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__webpack_require__(186));
-const exec_1 = __importDefault(__webpack_require__(514));
-const github_1 = __importDefault(__webpack_require__(438));
+const core = __importStar(__webpack_require__(186));
+const exec = __importStar(__webpack_require__(514));
+const github = __importStar(__webpack_require__(438));
 const strip_ansi_1 = __importDefault(__webpack_require__(591));
 function format(output) {
     const ret = ['**The container image has inefficient files.**'];
@@ -67,10 +86,10 @@ function format(output) {
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const image = core_1.default.getInput('image');
-            const configFile = core_1.default.getInput('config-file');
+            const image = core.getInput('image');
+            const configFile = core.getInput('config-file');
             const diveImage = 'wagoodman/dive:v0.9';
-            yield exec_1.default.exec('docker', ['pull', diveImage]);
+            yield exec.exec('docker', ['pull', diveImage]);
             const commandOptions = [
                 'run',
                 '-e',
@@ -99,19 +118,19 @@ function run() {
                     }
                 }
             };
-            const exitCode = yield exec_1.default.exec('docker', commandOptions, execOptions);
+            const exitCode = yield exec.exec('docker', commandOptions, execOptions);
             if (exitCode === 0) {
                 // success
                 return;
             }
-            const token = core_1.default.getInput('github-token');
-            const octokit = github_1.default.getOctokit(token);
-            const comment = Object.assign(Object.assign({}, github_1.default.context.issue), { issue_number: github_1.default.context.issue.number, body: format(output) });
+            const token = core.getInput('github-token');
+            const octokit = github.getOctokit(token);
+            const comment = Object.assign(Object.assign({}, github.context.issue), { issue_number: github.context.issue.number, body: format(output) });
             yield octokit.issues.createComment(comment);
-            core_1.default.setFailed(`Scan failed (exit code: ${exitCode})`);
+            core.setFailed(`Scan failed (exit code: ${exitCode})`);
         }
         catch (error) {
-            core_1.default.setFailed(error);
+            core.setFailed(error);
         }
     });
 }
