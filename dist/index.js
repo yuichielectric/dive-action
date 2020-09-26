@@ -124,6 +124,9 @@ function run() {
                 return;
             }
             const token = core.getInput('github-token');
+            if (!token) {
+                return;
+            }
             const octokit = github.getOctokit(token);
             const comment = Object.assign(Object.assign({}, github.context.issue), { issue_number: github.context.issue.number, body: format(output) });
             yield octokit.issues.createComment(comment);

@@ -85,6 +85,9 @@ async function run(): Promise<void> {
     }
 
     const token = core.getInput('github-token')
+    if (!token) {
+      return
+    }
     const octokit = github.getOctokit(token)
     const comment = {
       ...github.context.issue,

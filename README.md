@@ -13,10 +13,11 @@ dive action is an action that allows developers who develop Docker image to run 
 
 ### Inputs
 
-| Name        | Type   | Required | Default                              | Description                                                                  |
-| ----------- | ------ | -------- | ------------------------------------ | ---------------------------------------------------------------------------- |
-| image       | String | true     |                                      | Image to analyze                                                             |
-| config-file | String | false    | `${{ github.workspace }}/.dive.yaml` | Path to [dive config file](https://github.com/wagoodman/dive#ci-integration) |
+| Name         | Type   | Required | Default                              | Description                                                                  |
+| ------------ | ------ | -------- | ------------------------------------ | ---------------------------------------------------------------------------- |
+| image        | String | true     |                                      | Image to analyze                                                             |
+| config-file  | String | false    | `${{ github.workspace }}/.dive.yaml` | Path to [dive config file](https://github.com/wagoodman/dive#ci-integration) |
+| github-token | String | false    |                                      | GitHub token to post PR comment on dive failure                              |
 
 ### Workflow
 
@@ -39,6 +40,7 @@ jobs:
         with:
           image: "sample:latest"
           config-file: ${{ github.workspace }}/.dive-ci.yml
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Config file
