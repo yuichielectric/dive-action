@@ -2,9 +2,15 @@
   "name": "dive-action",
   "version": "1.0.0",
   "description": "[![Release][release-badge]][release] [![GitHub Marketplace][marketplace-badge]][marketplace] [![License][license-badge]][license]",
-  "main": "index.js",
+  "main": "lib/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "test": "jest",
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
     "type": "git",
@@ -29,7 +35,18 @@
     "strip-ansi": "^6.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.14",
     "@types/node": "^14.11.2",
+    "@typescript-eslint/parser": "^4.2.0",
+    "@vercel/ncc": "^0.24.1",
+    "eslint": "^7.9.0",
+    "eslint-plugin-github": "^4.1.1",
+    "eslint-plugin-jest": "^24.0.2",
+    "jest": "^26.4.2",
+    "jest-circus": "^26.4.2",
+    "js-yaml": "^3.14.0",
+    "prettier": "^2.1.2",
+    "ts-jest": "^26.4.0",
     "typescript": "^4.0.3"
   }
 }
