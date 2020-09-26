@@ -3,7 +3,7 @@ require('./sourcemap-register.js');module.exports =
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 109:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -16,74 +16,78 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const core = __webpack_require__(186);
-const exec = __webpack_require__(514);
-const github = __webpack_require__(438);
-const stripAnsi = __webpack_require__(591);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __importDefault(__webpack_require__(186));
+const exec_1 = __importDefault(__webpack_require__(514));
+const github_1 = __importDefault(__webpack_require__(438));
+const strip_ansi_1 = __importDefault(__webpack_require__(591));
 function format(output) {
-    const ret = ["**The container image has inefficient files.**"];
+    const ret = ['**The container image has inefficient files.**'];
     let summarySection = false;
     let inefficientFilesSection = false;
     let resultSection = false;
-    output.split("\n").forEach((line) => {
-        if (line.includes("Analyzing image")) {
+    for (const line of output.split('\n')) {
+        if (line.includes('Analyzing image')) {
             summarySection = true;
             inefficientFilesSection = false;
             resultSection = false;
-            ret.push("### Summary");
+            ret.push('### Summary');
         }
-        else if (line.includes("Inefficient Files:")) {
+        else if (line.includes('Inefficient Files:')) {
             summarySection = false;
             inefficientFilesSection = true;
             resultSection = false;
-            ret.push("### Inefficient Files");
+            ret.push('### Inefficient Files');
         }
-        else if (line.includes("Results:")) {
+        else if (line.includes('Results:')) {
             summarySection = false;
             inefficientFilesSection = false;
             resultSection = true;
-            ret.push("### Results");
+            ret.push('### Results');
         }
         else if (summarySection || resultSection) {
-            ret.push(stripAnsi(line));
+            ret.push(strip_ansi_1.default(line));
         }
         else if (inefficientFilesSection) {
-            if (line.startsWith("Count")) {
-                ret.push("| Count | Wasted Space | File Paht |");
-                ret.push("|---|---|---|");
+            if (line.startsWith('Count')) {
+                ret.push('| Count | Wasted Space | File Paht |');
+                ret.push('|---|---|---|');
             }
             else {
                 // https://github.com/wagoodman/dive/blob/master/runtime/ci/evaluator.go#L140
                 ret.push(`| ${line.slice(0, 5)} | ${line.slice(7, 19)} | ${line.slice(21)} |`);
             }
         }
-    });
-    return ret.join("\n");
+    }
+    return ret.join('\n');
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const image = core.getInput("image");
-            const configFile = core.getInput("config-file");
-            const diveImage = "wagoodman/dive:v0.9";
-            yield exec.exec("docker", ["pull", diveImage]);
+            const image = core_1.default.getInput('image');
+            const configFile = core_1.default.getInput('config-file');
+            const diveImage = 'wagoodman/dive:v0.9';
+            yield exec_1.default.exec('docker', ['pull', diveImage]);
             const commandOptions = [
-                "run",
-                "-e",
-                "CI=true",
-                "-e",
-                "DOCKER_API_VERSION=1.37",
-                "--rm",
-                "--mount",
+                'run',
+                '-e',
+                'CI=true',
+                '-e',
+                'DOCKER_API_VERSION=1.37',
+                '--rm',
+                '--mount',
                 `type=bind,source=${configFile},target=/.dive-ci`,
-                "-v",
-                "/var/run/docker.sock:/var/run/docker.sock",
+                '-v',
+                '/var/run/docker.sock:/var/run/docker.sock',
                 diveImage,
-                "--ci-config",
-                "/.dive-ci",
-                image,
+                '--ci-config',
+                '/.dive-ci',
+                image
             ];
-            let output = "";
+            let output = '';
             const execOptions = {
                 ignoreReturnCode: true,
                 listeners: {
@@ -92,22 +96,22 @@ function run() {
                     },
                     stderr: (data) => {
                         output += data.toString();
-                    },
-                },
+                    }
+                }
             };
-            const exitCode = yield exec.exec("docker", commandOptions, execOptions);
+            const exitCode = yield exec_1.default.exec('docker', commandOptions, execOptions);
             if (exitCode === 0) {
                 // success
                 return;
             }
-            const token = core.getInput("github-token");
-            const octokit = github.getOctokit(token);
-            const comment = Object.assign(Object.assign({}, github.context.issue), { issue_number: github.context.issue.number, body: format(output) });
+            const token = core_1.default.getInput('github-token');
+            const octokit = github_1.default.getOctokit(token);
+            const comment = Object.assign(Object.assign({}, github_1.default.context.issue), { issue_number: github_1.default.context.issue.number, body: format(output) });
             yield octokit.issues.createComment(comment);
-            core.setFailed(`Scan failed (exit code: ${exitCode})`);
+            core_1.default.setFailed(`Scan failed (exit code: ${exitCode})`);
         }
         catch (error) {
-            core.setFailed(error);
+            core_1.default.setFailed(error);
         }
     });
 }
