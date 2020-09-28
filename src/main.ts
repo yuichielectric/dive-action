@@ -70,7 +70,7 @@ async function run(): Promise<void> {
       )
     }
 
-    const parameters = ['run', ...commandOptions, image]
+    const parameters = ['run', ...commandOptions, diveImage, image]
     let output = ''
     const execOptions = {
       ignoreReturnCode: true,
