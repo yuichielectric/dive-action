@@ -36,7 +36,7 @@ jobs:
       - name: Build image
         run: docker build -t sample:latest .
       - name: Dive
-        uses: yuichielectric/dive-action@0.0.3
+        uses: yuichielectric/dive-action@0.0.4
         with:
           image: "sample:latest"
           config-file: ${{ github.workspace }}/.dive-ci.yml
