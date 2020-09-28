@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as github from '@actions/github'
 import stripAnsi from 'strip-ansi'
+import fs from 'fs'
 
 function format(output: string): string {
   const ret = ['**The container image has inefficient files.**']
@@ -51,21 +52,25 @@ async function run(): Promise<void> {
     await exec.exec('docker', ['pull', diveImage])
 
     const commandOptions = [
-      'run',
       '-e',
       'CI=true',
       '-e',
       'DOCKER_API_VERSION=1.37',
       '--rm',
-      '--mount',
-      `type=bind,source=${configFile},target=/.dive-ci`,
       '-v',
-      '/var/run/docker.sock:/var/run/docker.sock',
-      diveImage,
-      '--ci-config',
-      '/.dive-ci',
-      image
+      '/var/run/docker.sock:/var/run/docker.sock'
     ]
+
+    if (fs.existsSync(configFile)) {
+      commandOptions.push(
+        '--mount',
+        `type=bind,source=${configFile},target=/.dive-ci`,
+        '--ci-config',
+        '/.dive-ci'
+      )
+    }
+
+    const parameters = ['run', ...commandOptions, diveImage, image]
     let output = ''
     const execOptions = {
       ignoreReturnCode: true,
@@ -78,7 +83,7 @@ async function run(): Promise<void> {
         }
       }
     }
-    const exitCode = await exec.exec('docker', commandOptions, execOptions)
+    const exitCode = await exec.exec('docker', parameters, execOptions)
     if (exitCode === 0) {
       // success
       return

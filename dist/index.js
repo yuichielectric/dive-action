@@ -43,6 +43,7 @@ const core = __importStar(__webpack_require__(186));
 const exec = __importStar(__webpack_require__(514));
 const github = __importStar(__webpack_require__(438));
 const strip_ansi_1 = __importDefault(__webpack_require__(591));
+const fs_1 = __importDefault(__webpack_require__(747));
 function format(output) {
     const ret = ['**The container image has inefficient files.**'];
     let summarySection = false;
@@ -91,21 +92,18 @@ function run() {
             const diveImage = 'wagoodman/dive:v0.9';
             yield exec.exec('docker', ['pull', diveImage]);
             const commandOptions = [
-                'run',
                 '-e',
                 'CI=true',
                 '-e',
                 'DOCKER_API_VERSION=1.37',
                 '--rm',
-                '--mount',
-                `type=bind,source=${configFile},target=/.dive-ci`,
                 '-v',
-                '/var/run/docker.sock:/var/run/docker.sock',
-                diveImage,
-                '--ci-config',
-                '/.dive-ci',
-                image
+                '/var/run/docker.sock:/var/run/docker.sock'
             ];
+            if (fs_1.default.existsSync(configFile)) {
+                commandOptions.push('--mount', `type=bind,source=${configFile},target=/.dive-ci`, '--ci-config', '/.dive-ci');
+            }
+            const parameters = ['run', ...commandOptions, diveImage, image];
             let output = '';
             const execOptions = {
                 ignoreReturnCode: true,
@@ -118,7 +116,7 @@ function run() {
                     }
                 }
             };
-            const exitCode = yield exec.exec('docker', commandOptions, execOptions);
+            const exitCode = yield exec.exec('docker', parameters, execOptions);
             if (exitCode === 0) {
                 // success
                 return;
