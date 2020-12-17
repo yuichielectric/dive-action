@@ -21,6 +21,8 @@ dive action is an action that allows developers who develop Docker image to run 
 
 ### Workflow
 
+test
+
 ```yaml
 name: "Dive CI"
 
