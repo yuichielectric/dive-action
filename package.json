@@ -32,7 +32,7 @@
     "@actions/core": "^1.2.7",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^4.0.0",
-    "strip-ansi": "^6.0.0"
+    "strip-ansi": "^7.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.22",
