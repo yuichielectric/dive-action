@@ -30,7 +30,7 @@ function format(output: string): string {
       ret.push(stripAnsi(line))
     } else if (inefficientFilesSection) {
       if (line.startsWith('Count')) {
-        ret.push('| Count | Wasted Space | File Paht |')
+        ret.push('| Count | Wasted Space | File Path |')
         ret.push('|---|---|---|')
       } else {
         // https://github.com/wagoodman/dive/blob/master/runtime/ci/evaluator.go#L140
