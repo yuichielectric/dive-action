@@ -35,7 +35,7 @@
     "strip-ansi": "^7.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.0.1",
     "@types/node": "^16.4.10",
     "@typescript-eslint/parser": "^4.29.2",
     "@vercel/ncc": "^0.29.0",
