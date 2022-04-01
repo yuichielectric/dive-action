@@ -48,7 +48,7 @@ async function run(): Promise<void> {
     const image = core.getInput('image')
     const configFile = core.getInput('config-file')
 
-    const diveImage = 'wagoodman/dive:v0.9'
+    const diveImage = 'wagoodman/dive:v0.10'
     await exec.exec('docker', ['pull', diveImage])
 
     const commandOptions = [
