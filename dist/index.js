@@ -88,7 +88,7 @@ function run() {
         try {
             const image = core.getInput('image');
             const configFile = core.getInput('config-file');
-            const diveImage = 'wagoodman/dive:v0.9';
+            const diveImage = 'wagoodman/dive:v0.10';
             yield exec.exec('docker', ['pull', diveImage]);
             const commandOptions = [
                 '-e',
