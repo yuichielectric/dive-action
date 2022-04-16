@@ -48,7 +48,7 @@ async function run(): Promise<void> {
     const image = core.getInput('image')
     const configFile = core.getInput('config-file')
 
-    const diveImage = 'wagoodman/dive:v0.9'
+    const diveImage = 'wagoodman/dive:v0.10'
     await exec.exec('docker', ['pull', diveImage])
 
     const commandOptions = [
@@ -65,12 +65,16 @@ async function run(): Promise<void> {
       commandOptions.push(
         '--mount',
         `type=bind,source=${configFile},target=/.dive-ci`,
+      )
+    }
+
+    let parameters = ['run', ...commandOptions, diveImage, image]
+    if (fs.existsSync(configFile)) {
+      parameters.push(
         '--ci-config',
         '/.dive-ci'
       )
     }
-
-    const parameters = ['run', ...commandOptions, diveImage, image]
     let output = ''
     const execOptions = {
       ignoreReturnCode: true,
