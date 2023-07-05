@@ -48,10 +48,12 @@ async function run(): Promise<void> {
     const image = core.getInput('image')
     const configFile = core.getInput('config-file')
 
-    const diveImage = 'wagoodman/dive:v0.9'
-    await exec.exec('docker', ['pull', diveImage])
-
-    const commandOptions = [
+    if (configFile && !fs.existsSync(configFile)) {
+      core.setFailed(`Dive configuration file ${configFile} doesn't exist!`)
+      return
+    }
+    
+    const runOptions = [
       '-e',
       'CI=true',
       '-e',
@@ -61,16 +63,17 @@ async function run(): Promise<void> {
       '/var/run/docker.sock:/var/run/docker.sock'
     ]
 
-    if (fs.existsSync(configFile)) {
-      commandOptions.push(
-        '--mount',
-        `type=bind,source=${configFile},target=/.dive-ci`,
-        '--ci-config',
-        '/.dive-ci'
-      )
+    const cmdOptions = []
+    
+    if (configFile) {
+      runOptions.push('-v', `${configFile}:/.dive-ci`)
+      cmdOptions.push('--config-file', '/.dive-ci')
     }
-
-    const parameters = ['run', ...commandOptions, diveImage, image]
+    
+    const diveImage = 'wagoodman/dive:v0.9'
+    await exec.exec('docker', ['pull', diveImage])
+        
+    const parameters = ['run', ...runOptions, diveImage, image, ...cmdOptions]
     let output = ''
     const execOptions = {
       ignoreReturnCode: true,
