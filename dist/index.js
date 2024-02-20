@@ -89,7 +89,7 @@ function run() {
         try {
             const image = core.getInput('image');
             const configFile = core.getInput('config-file');
-            const diveImage = 'wagoodman/dive:v0.9';
+            const diveImage = 'wagoodman/dive:v0.10';
             yield exec.exec('docker', ['pull', diveImage]);
             const commandOptions = [
                 '-e',
@@ -101,9 +101,13 @@ function run() {
                 '/var/run/docker.sock:/var/run/docker.sock'
             ];
             if (fs_1.default.existsSync(configFile)) {
-                commandOptions.push('--mount', `type=bind,source=${configFile},target=/.dive-ci`, '--ci-config', '/.dive-ci');
+                commandOptions.push('--mount', `type=bind,source=${configFile},target=/.dive-ci`);
             }
-            const parameters = ['run', ...commandOptions, diveImage, image];
+            let parameters = ['run', ...commandOptions, diveImage, image];
+
+            if (fs_1.default.existsSync(configFile)) {
+              parameters.push('--ci-config', '/.dive-ci');
+          }
             let output = '';
             const execOptions = {
                 ignoreReturnCode: true,
